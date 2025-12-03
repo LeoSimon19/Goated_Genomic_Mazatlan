@@ -257,49 +257,105 @@ Pour FAIRISER les données de sorties....
 
 Pour la FAIRISATION, chaques scripts a été renommer, et leur ordre d'utilisation bien énuméré. Leur contenue a également été largement améliorer, avec des annotations claires pour chaques étapes du scripts et leur fonctions. De plus, les différents scripts utilisés et retravaillés sont énumérés et leur fonction expliqué ci dessous:
 
--   step0_taxonomy_map_creation.sh =
+-   **step0_taxonomy_map_creation.sh =** Génère une table de correspondance entre les identifiants des séquences psbO et leur lignée taxonomique à partir du fichier FASTA. Cette *taxonomy map* est utilisée pour l’assignation taxonomique dans les étapes suivantes.
 
--   step1_filtrage_complexity.sh =
+-   **step1_filtrage_complexity.sh =** Calcule la complexité de chaque read à l’aide de `seqkit fx2tab` et filtre les reads présentant une complexité ≥ 0,75. Produit un FASTQ contenant uniquement les reads conservés.
 
--   step2_run_bwa.sh =
+-   **step2_run_bwa.sh =** Aligne les reads filtrés (R1/R2) sur la référence psbO dédupliquée (`psbO_ref_unique.fna`) avec BWA-MEM. Les paramètres utilisés sont ajustés pour tolérer une forte variabilité des séquences environnementales.
 
--   step3_sequence_count.sh =
+-   **step3_sequence_count.sh =** Convertit les fichiers SAM produits par BWA en fichiers BAM triés et indexés, puis génère les statistiques de comptage par contig via `samtools idxstats`.
 
--   step4_analyze_composition_taxonomique.sh =
+-   **step4_analyze_composition_taxonomique.sh =** Fusionne les données de comptage (`idxstats`) avec la *taxonomy map* afin de produire un profil d’abondance par taxon.
 
--   step5_profil_and_abundancy.sh =
+Un exemple d'un scirpt retravaillé est montré ci-dessous. Nous vous invitons à regarder le fichier des scripts retravailler dans le Github, afin de voir l'amélioration et la FAIRISATION effectué.
 
-Chaque script utilisé dans la mise en place du pipeline et la structuration des données est détaillé ci-dessous :
+```{python}
+###############################################################################
+# SCRIPT : step1_filtrage_complexite.sh
+#
+# OBJECTIF :
+#   - Calculer la complexité de chaque read (via seqkit fx2tab).
+#   - Filtrer les reads dont la complexité est ≥ 0.75.
+#   - Extraire uniquement ces reads "complexes" dans un nouveau FASTQ.
+#
+# CONTEXTE :
+#   - Le filtrage de complexité permet d’éliminer les séquences peu informatives
+#     (homopolymères, faible diversité, artefacts PCR…).
+#   - Se base sur seqkit, option -i pour calculer l'indice de complexité.
+#
+# INPUTS ATTENDUS :
+#   data_filtered_post_bwa/<prefix>_<pair>_min70.fastq
+#   Exemple : BP_1_min70.fastq
+#   Données provenant de l'étape post-BWA.
+#
+# OUTPUTS :
+#   Outputs/complexity_stats/<prefix>_<pair>_stats.tsv      (statistiques complètes)
+#   Outputs/complexity_stats/<prefix>_<pair>_ids.txt        (IDs filtrés ≥ 0.75)
+#   Outputs/data_filtered_post_bwa/final/<prefix>_<pair>_filtered.fastq
+#
+# DEPENDANCES :
+#   - seqkit Version 2.3.0
+#   - awk : Version GNU Awk 5.3.1
+#
+# FAIRNESS :
+#   - Le script documente ses étapes, formats, outils et versions attendues.
+#   - Les chemins sont explicites et versionnables.
+#   - Les étapes sont déterministes et reproductibles.
+#
+# AUTEUR :
+#   <CACAO M.F Solane> — <03/12/2025>
+###############################################################################
 
-### **namescript1.R – Quality Control**
 
--   **Input** : fichiers FASTQ
+### ------------------------------------------------------------------------ ###
+### Étape 0 : Configuration générale
+### ------------------------------------------------------------------------ ###
 
--   **Output** : rapports FastQC
+# Se placer dans l'espace de travail (adapter si besoin)
+cd ~/Workspace || {
+  echo "❌ ERREUR : Impossible d'accéder à ~/Workspace"
+  exit 1
+}
 
--   **Fonction** : contrôle de qualité, filtrage \<70 nt
+# Préfixes correspondant aux échantillons (adapter si besoin)
+PREFIXES=("BP" "EP" "FP")
 
-```         
-### **namescript2.sh – Indexation de la base psbO**
+# Valeur seuil de complexité
+THRESHOLD=0.75
+
+
+### ------------------------------------------------------------------------ ###
+### Étape 1 : Préparation des dossiers de sortie
+### ------------------------------------------------------------------------ ###
+mkdir -p Outputs/complexity_stats
+mkdir -p Outputs/data_filtered_post_bwa/final
+
+
+### ------------------------------------------------------------------------ ###
+### Étape 2 : Extraction des stats de complexité
+### seqkit fx2tab -n -i :
+###   -n : imprime l'ID
+###   -i : calcule & imprime l’indice de complexité (Shannon)
+### ------------------------------------------------------------------------ ###
+echo "### Extraction des statistiques de complexité ###"
+
+for prefix in "${PREFIXES[@]}"; do
+  for pair in 1 2; do
+
+    input="Outputs/data_filtered_post_bwa/${prefix}_${pair}_min70.fastq"
+    output_stats="Outputs/complexity_stats/${prefix}_${pair}_stats.tsv"
+
+    echo "➡ Calcul de la complexité pour ${prefix}_${pair}..."
+
+    if [[ ! -f "$input" ]]; then
+      echo "⚠ Fichier introuvable : $input — ignoré."
+      continue
+    fi
+
+    seqkit fx2tab -n -i "$input" > "$output_stats"
+  done
+done
 ```
-
--   **Input** : psb_db_unique.fasta
-
--   **Output** : fichiers d’index BWA
-
--   **Fonction** : préparation pour l'alignement
-
-### **namescript3.sh – Alignement BWA + comptage**
-
--   **Input** : FASTQ filtrés
-
--   **Output** : .sam, .bam, idxstats.txt
-
--   **Commandes** : `bwa mem …` puis `samtools idxstats`
-
--   **Fonction** :
-
-*(à compléter avec des exemples de scripts ???)*
 
 ## **7. Pipeline analytique**
 
