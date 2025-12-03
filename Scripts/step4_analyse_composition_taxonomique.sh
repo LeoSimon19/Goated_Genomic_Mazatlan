@@ -2,7 +2,7 @@
 
 
 ###############################################################################
-# SCRIPT : generate_taxonomic_profiles.sh
+# SCRIPT : step4_analyse_composition_taxonomique.sh
 #
 # OBJECTIF :
 #   Combiner les counts par contig (résultant de l’alignement BWA) avec la carte
@@ -27,9 +27,10 @@
 #       Colonnes : Taxonomy | Count | Relative_Abundance(%)
 #
 # DÉPENDANCES du script :
-#   awk, sort -> Aucun de ces élément n'est un software mais 
+#   awk : Version 5.3.1
+#   sort : Version 9.4
 #
-# IMPORTANT :
+# INFOS :
 #   Le script :
 #     - gère les contigs sans taxonomie → "Unclassified"
 #     - normalise les abondances (somme = 100 %)

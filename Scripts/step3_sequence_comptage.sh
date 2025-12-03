@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ###############################################################################
-# SCRIPT : sam_to_counts.sh
+# SCRIPT : step3_sequence_comptage.sh
 #
 # OBJECTIF :
 #   Convertir les fichiers SAM issus de BWA en fichiers BAM triés et indexés,

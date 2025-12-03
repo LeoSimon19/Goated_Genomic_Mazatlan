@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ###############################################################################
-# SCRIPT : bwa_tolerant_alignment.sh
+# SCRIPT : step2_alignement_bwa.sh
 #
 # OBJECTIF :
 #   Aligner des reads filtrés (deux sens de lectures : R1/R2) sur une référence psbO dédupliquée
@@ -12,17 +12,17 @@
 #   data_filtered_post_bwa/<sample>_1_min70.fastq
 #   data_filtered_post_bwa/<sample>_2_min70.fastq
 #
-# RÉFÉRENCE :
+# DATABASE DE RÉFÉRENCE :
 #   index_psbO/psbO_ref_unique.fna   (index BWA déjà généré)
 #
 # OUTPUTS :
 #   Outputs/bwa_output/<sample>_filtered_unique.sam
 #
 # DÉPENDANCE :
-#   bwa ≥ 0.7
+#   bwa = 0.7
 #
 # ---------------------------------------------------------------------------
-# DÉTAIL DES PARAMÈTRES BWA-MEM UTILISÉS
+# DÉTAIL DES PARAMÈTRES BWA UTILISÉS
 # ---------------------------------------------------------------------------
 #
 # -t 4      : Nombre de threads (4 CPU utilisés)

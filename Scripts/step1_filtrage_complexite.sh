@@ -1,14 +1,14 @@
 #!/bin/bash
 
 ###############################################################################
-# SCRIPT : filter_complex_reads.sh
+# SCRIPT : step1_filtrage_complexite.sh
 #
 # OBJECTIF :
 #   - Calculer la complexité de chaque read (via seqkit fx2tab).
 #   - Filtrer les reads dont la complexité est ≥ 0.75.
 #   - Extraire uniquement ces reads "complexes" dans un nouveau FASTQ.
 #
-# CONTEXTE SCIENTIFIQUE :
+# CONTEXTE :
 #   - Le filtrage de complexité permet d’éliminer les séquences peu informatives
 #     (homopolymères, faible diversité, artefacts PCR…).
 #   - Se base sur seqkit, option -i pour calculer l'indice de complexité.
