@@ -57,61 +57,7 @@ Voyez ci-dessous, une capture d'écran d'une infime partie de l'arborescence du 
 │   │   ├── FP_filtered.sam
 │   │   ├── FP_filtered_unique.sam
 │   │   └── matched_ids
-│   │       ├── BP_ref_counts_inv.tsv
-│   │       ├── BP_ref_counts_tab.txt
-│   │       ├── BP_ref_counts.txt
-│   │       ├── BP_ref_counts.txt.bak
-│   │       ├── BP_ref_hits.txt
-│   │       ├── EP_ref_counts_inv.tsv
-│   │       ├── EP_ref_counts_tab.txt
-│   │       ├── EP_ref_counts.txt
-│   │       ├── EP_ref_hits.txt
-│   │       ├── FP_ref_counts_inv.tsv
-│   │       ├── FP_ref_counts_tab.txt
-│   │       ├── FP_ref_counts.txt
-│   │       └── FP_ref_hits.txt
-│   ├── complexity_stats
-│   │   ├── BP_1_ids.txt
-│   │   ├── BP_1_stats.tsv
-│   │   ├── BP_2_ids.txt
-│   │   ├── BP_2_stats.tsv
-│   │   ├── EP_1_ids.txt
-│   │   ├── EP_1_stats.tsv
-│   │   ├── EP_2_ids.txt
-│   │   ├── EP_2_stats.tsv
-│   │   ├── FP_1_ids.txt
-│   │   ├── FP_1_stats.tsv
-│   │   ├── FP_2_ids.txt
-│   │   └── FP_2_stats.tsv
-│   ├── data_filtered_post_bwa
-│   │   ├── BP_1_min70.fastq
-│   │   ├── BP_2_min70.fastq
-│   │   ├── EP_1_min70.fastq
-│   │   ├── EP_2_min70.fastq
-│   │   ├── FP_1_min70.fastq
-│   │   └── FP_2_min70.fastq
-│   ├── EP_1.fastq.gz -> ../metagenomics_mzt/EP_1.fastq.gz
-│   ├── EP_2.fastq.gz -> ../metagenomics_mzt/EP_2.fastq.gz
-│   ├── filtrage_complexity.sh
-│   ├── FP_1.fastq.gz -> ../metagenomics_mzt/FP_1.fastq.gz
-│   ├── FP_2.fastq.gz -> ../metagenomics_mzt/FP_2.fastq.gz
-│   ├── index_psbO
-│   │   ├── psbO_20210825.fna -> ../psbO_20210825.fna
-│   │   ├── psbO_20210825.fna.amb
-│   │   ├── psbO_20210825.fna.ann
-│   │   ├── psbO_20210825.fna.bwt
-│   │   ├── psbO_20210825.fna.pac
-│   │   ├── psbO_20210825.fna.sa
-│   │   ├── psbO_ref_unique.fna
-│   │   ├── psbO_ref_unique.fna.amb
-│   │   ├── psbO_ref_unique.fna.ann
-│   │   ├── psbO_ref_unique.fna.bwt
-│   │   ├── psbO_ref_unique.fna.pac
-│   │   ├── psbO_ref_unique.fna.sa
-│   │   └── taxonomy_map
-│   │       ├── psbO_taxonomy_map_fixed.tsv
-│   │       ├── psbO_taxonomy_map.tsv
-│   │       └── psbO_taxonomy_map.tsv.bak
+..........
 │   ├── matched_ids
 │   │   ├── BP_ref_hits.txt
 │   │   ├── EP_ref_hits.txt
@@ -126,7 +72,7 @@ Voyez ci-dessous, une capture d'écran d'une infime partie de l'arborescence du 
 │       ├── EP_taxonomic_profile.tsv
 │       ├── FP_taxonomic_profile_newtest.tsv
 │       └── FP_taxonomic_profile.tsv
- ...................
+ ..........
 ```
 
 Une FAIRISATION de cette arborescence avec un exemple de départ et des parties bien disctinctes est absolument nécessaire.
@@ -154,11 +100,11 @@ Elles comprennent **6 fichiers .fastq.gz** non diffusables :
 
 -   FP2.fastq.gz
 
-**Accès :** stockés sur le serveur du laboratoire XXX (Mazatlán), avec un accès restreint.
+**Accès :** stockés sur le serveur du laboratoire de l'ANOM à Mazatlán , avec un accès restreint.
 
-Le fait qu'il ne soient pas difusables et restreint sur le serveur du laboratoire n'est pas FAIR. De plus leur nomination ne sont pas claires pour quelqu'un extèrieur au projet.
+Le fait qu'il ne soient pas difusables et restreint sur le serveur du laboratoire n'est pas FAIR. De plus leur nomination ne sont pas claires pour quelqu'un extèrieur au projet, de plus il n'y a pas d'information de types métadonnées, expliquant l'origine et le contenu de ces fichiers.
 
-### 4.1 Données de sorties (output)
+### 4.2 Données de sorties (output)
 
 Les fichiers de données sortantes n'étaient pas très claires, avec des noms peu compréhensible, les formats non informés, et pas d'explication sur l'utilité de chaques sortie. Ci-dessous un exemple des noms des anciens scripts:
 
@@ -176,28 +122,55 @@ Plusieurs aspects des scripts les rendaient non FAIR. Leur noms n'étaient pas c
 
 Exemple du contenue d'un des anciens scripts:
 
-```         
+```{python}
+#!/bin/bash
+
+# Se placer dans le bon dossier (adapter si besoin)
+cd ~/bwa_psbO_tools
+
+# Étape 1 : créer les dossiers si besoin
+mkdir -p complexity_stats
+mkdir -p data_filtered_post_bwa/final
+
+# Étape 2 : extraire les stats de complexité
+for prefix in BP EP FP; do
+  for pair in 1 2; do
+    echo "Calcul de la complexité pour ${prefix}_${pair}..."
+    seqkit fx2tab -n -i data_filtered_post_bwa/${prefix}_${pair}_min70.fastq > complexity_stats/${prefix}_${pair}_stats.tsv
+  done
+done
+
+# Étape 3 : filtrer les reads complexes (complexité >= 0.75)
+for prefix in BP EP FP; do
+  for pair in 1 2; do
+    echo "Filtrage des IDs complexes pour ${prefix}_${pair}..."
+    awk '$3 >= 0.75 {print $1}' complexity_stats/${prefix}_${pair}_stats.tsv > complexity_stats/${prefix}_${pair}_ids.txt
+  done
+done
+
+# Étape 4 : extraire les séquences complexes uniquement
+for prefix in BP EP FP; do
+  for pair in 1 2; do
+    echo "Extraction des reads complexes pour ${prefix}_${pair}..."
+    seqkit grep -f complexity_stats/${prefix}_${pair}_ids.txt data_filtered_post_bwa/${prefix}_${pair}_min70.fastq \
+      -o data_filtered_post_bwa/final/${prefix}_${pair}_filtered.fastq
+  done
+done
+
+echo "✅ Filtrage terminé. Résultats dans data_filtered_post_bwa/final/"
 ```
 
 # **PARTIE 2 - ETAT FAIR**
 
-## **1. Objectif de la partie 2**
+But : décrire objectivement les étapes de FAIRISATION effectués en réponses aux éléments non-FAIR décrits en partie 1.
 
-Ce fichier décrit :
+## **1. Contexte scientifique**
 
--   les **scripts** utilisés (Python, Visual, etc.),
-
--   les **formats et sources des données**,
-
--   les **outputs** générés,
-
--   les **versions logicielles**,
-
--   le **pipeline analytique complet**
+Les protocoles et materiels utilisés, ainsi que les métadonnées concernant le stages ont été nettement plus complètées au sein du document Metadonnées disponible dans notre projet Github, nous vous invitions ainsi à vous y référer pour plus d'informations à ces sujets.
 
 ## **2. Structure du projet**
 
-= Mettre l'aborescence avant la fairisation ou un extrait, et expliquer comment on l'a rendu plus fair
+L'arborescence a été retravaillé, et refaite afin de FAIRISER. On retrouvrel'exemple de ce qu'il aurait fallu faire est représenté ci-dessous. On y retrouve des fichiers claires et bien rangé, avec une structuration logique.
 
 ```{bash}
 ├── Inputs
@@ -225,6 +198,18 @@ Ce fichier décrit :
 
 ```
 
+Avec:
+
+-   Inputs = Comprent les données d'entrées. (en réalité en accés restreint)
+
+-   Outputs = Contient les données sortant des scripts utilisées.
+
+-   Readme = Fichier texte, comme celui dans lequel vous vous trouvez actuellement. Expliquant les différents éléments du projet.
+
+-   Scripts = Contenant les scripts utilisées dans la mise en place de la pipeline
+
+-   Sol_genomic_Mazatlan.Rproj = Contient le projet du logiciel de programmation utilisé (R dans cet exemple).
+
 ## **3. Dépendances et environnement**
 
 Il faudra noter que cette liste est inssufisante, en effet certains outils et packages utilisé lors du stage ont été oublier avec le temps car ils n'ont opas été enregistrer/noter. D'où l'importance de garder une trace ecrite durant et tout le long de la réalisation du stage.
@@ -238,34 +223,23 @@ Listes à compléter selon ton stage des versions et logiciels utilisés
 | samtools   | x.x                          |
 | fastqc     | x.x                          |
 | seqkit     | x.x                          |
-| perl       | x.x                          |
+|            | x.x                          |
 | Packages R | dplyr x.x, ggplot2 x.x, etc. |
 
-## **4. Données d’entrée (Input)**
+## **4. Données** 
 
-### **4.1 Données brutes**
+### **4.1 Données d'entrées (input)**
 
-Les données proviennent des échantillons Niskin collectés lors du stage.\
-Elles comprennent **6 fichiers .fastq.gz** non diffusables :
+Pour rendre plus FAIR les données d'entrées, il aurait fallu par exemple leur attribuer un DOI et pour ce faire les rendres publiques. Ce qui n'est pas possibles ici, les données de séquencages étant restreintes sur le serveur du laboratoire de Mazatlan de l'UNAM.
 
--   BP1.fastq.gz
+Pour FAIRISER, les étapes d'acquisitions de ces données sont décrites ci-dessous:
 
--   BP2.fastq.gz
-
--   EP1.fastq.gz
-
--   EP2.fastq.gz
-
--   FP1.fastq.gz
-
--   FP2.fastq.gz
-
-**Accès :** stockés sur le serveur du laboratoire XXX (Mazatlán), accès restreint.
+1.  Séquencage des échantillons d'eaux réalisé par l'entreprise Koréenne MACROGENE, via la technique (TruSeq Nano and 8G on NovaSeq X 150PE) protocole décrit dans le le lien suivant: ......
+2.  ...
 
 ### **4.2 Référence taxonomique**
 
-Base psbO ([Pierella Karlusich *et al.* 2023]{.underline}) :\
-Contient les séquences psbO issues de bases eucaryotes et procaryotes.\
+Une partie de la FAIRISATION est aussi de donner les séquences psbO utilisé comme référence pour la comparaisons avec les séquences provenant des échantillons. Les séquences de références proviennent de [Pierella Karlusich *et al.* 2023,]{.underline} issues de bases eucaryotes et procaryotes.\
 Lien : (S-BSST659), DOI: <https://doi.org/10.1111/1755-0998.13592>
 
 [Ci-dessous un exemple d'une séquence issus de l'article :]{.underline}
@@ -275,7 +249,25 @@ Lien : (S-BSST659), DOI: <https://doi.org/10.1111/1755-0998.13592>
 CAATCTCACCTACGAAGACATCCACAACACCGGCCTGGCCAACGACTGCCCCTCCCTGCCCGAATCGGCCCGCGGTTCGATCCCCCTGGATTCCGGCACCGCCTACCAGCTCAGGGAGATCTGCATGCACCCCGCCGAGGTGTTCGTGAAGGGCGAACCCGCCAACAAGCGCCAGGAGGCCCAGTTCGTCGCCGGCAAGATCCTCACCCGCTTCACCACCAGCCTGGATCAGGTCTATGGCGACCTGACCGTCAGCGGTGACTCCCTCAACTTCAAGGAGCAGGGCGGTCTCGACTTCCAGATCGTCACCGTGTTGCTGCCCGGCGGTGAGGAGGTGCCCTTCGTGTTCTCCAGCAAGCAGCTCAAGGCCACGGCCGACGGCGCCGCCATCAGCACCAGCACGGACTTCACCGGCACCTACCGGGTGCCCAGCTACCGCACCTCCAACTTCCTGGATCCCAAGTCGCGCGGGCTCACCACCGGCGTGGACTACACCCAGGGCCTGGTGGGCCTCGGCGCCGACGGTGATGGCCTGGAGCGCGAGAACATCAAGAGCTACGTGGACGGCGCCGGCTCGATGGAGCTGGCGATCACCCGGGTGGATGCCAGCACCGGTGAGTTCGCCGGTGTGTTCACCGCCCTGCAGCCCTCCGACACCGACATGGGCTCCAAGGATCCCCTTGACGTGAAGATCACCGGTGAGGTCTACGGCCGTCTG
 ```
 
+### 4.3 Données de sorties (output)
+
+Pour FAIRISER les données de sorties....
+
 ## **5. Scripts**
+
+Pour la FAIRISATION, chaques scripts a été renommer, et leur ordre d'utilisation bien énuméré. Leur contenue a également été largement améliorer, avec des annotations claires pour chaques étapes du scripts et leur fonctions. De plus, les différents scripts utilisés et retravaillés sont énumérés et leur fonction expliqué ci dessous:
+
+-   step0_taxonomy_map_creation.sh =
+
+-   step1_filtrage_complexity.sh =
+
+-   step2_run_bwa.sh =
+
+-   step3_sequence_count.sh =
+
+-   step4_analyze_composition_taxonomique.sh =
+
+-   step5_profil_and_abundancy.sh =
 
 Chaque script utilisé dans la mise en place du pipeline et la structuration des données est détaillé ci-dessous :
 
