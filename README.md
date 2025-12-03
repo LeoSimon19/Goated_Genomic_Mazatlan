@@ -1,26 +1,25 @@
-
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
-# **Titre du Stage**
-
-# Goated_Genomic_Mazatlan
-
+## [**Projet de FAIRISATION du sujet de stage de Master 1:**]{.underline}
 
 ## [**Analyse métagénomique de la diversité photosynthétique (gène psbO) dans la Baie de Mazatlán et le Lagon Urias (Mexique)**]{.underline}
 
-Ce README documente l’ensemble des scripts, données, métadonnées et étapes analytiques utilisés durant le stage de Master 1 de **Solane Cacao-Martins-Février** au laboratoire XXX (Mazatlán, Mexique).\
-Il vise à rendre le pipeline plus **FAIR** (Findable, Accessible, Interoperable, Reusable) et à faciliter la reproductibilité des analyses.
+Ce README documente le processus de FAIRISATION de l’ensemble des scripts, données, métadonnées et étapes analytiques utilisés durant le stage de Master 1 de **Solane Cacao-Martins-Février** au laboratoire XXX (Mazatlán, Mexique).\
+Il vise à rendre le pipeline plus **FAIR** (Findable, Accessible, Interoperable, Reusable) et à faciliter la reproductibilité des analyses. En expliquant nottament les différentes étapes de FAIRISATION mises en place dans cette démarche. Tout le projet n'a pas pu être entièrement FAIRISE, mais ce Readme sert à montrer et expliquer les différentes choses qui ont pu l'être.
+
+La partie une présente le context général du stage et l'état initial "non-FAIR" de certains points, tandis que la partie deux présente des objets qui ont été amélioré dans le but de FAIRISATOIN.
+
+# **PARTIE 1 - ETAT INITIAL (Non-FAIR)**
 
 ## **1. Contexte scientifique**
 
-
 Le projet utilise une approche métagénomique ciblée sur le gène **psbO**, permettant d’obtenir un aperçu fonctionnel de la diversité photosynthétique (procaryotes + eucaryotes) dans différents sites :
 
--    **BP** : Stations de la Baie de Mazatlán
+-   **BP** : Stations de la Baie de Mazatlán
 
--    **EP** : Entrée du lagon (zone anthropisée)
+-   **EP** : Entrée du lagon (zone anthropisée)
 
--    **FP** : Fond du lagon
+-   **FP** : Fond du lagon
 
 L’échantillonnage a été effectué à l’aide d’une bouteille Niskin à 1 m de profondeur. Les extraits ADN ont été séquencés (NGS, MacroGen ; paired-end 150 bp).
 
@@ -30,15 +29,15 @@ Montrer le **AVANT APRES FAIR**
 
 Ce fichier décrit :
 
--    les **scripts** utilisés (Python, Visual, etc.),
+-   les **scripts** utilisés (Python, Visual, etc.),
 
--    les **formats et sources des données**,
+-   les **formats et sources des données**,
 
--    les **outputs** générés,
+-   les **outputs** générés,
 
--    les **versions logicielles**,
+-   les **versions logicielles**,
 
--    le **pipeline analytique complet**
+-   le **pipeline analytique complet**
 
 ## **3. Structure du projet**
 
@@ -91,17 +90,17 @@ Listes à compléter selon ton stage des versions et logiciels utilisés
 Les données proviennent des échantillons Niskin collectés lors du stage.\
 Elles comprennent **6 fichiers .fastq.gz** non diffusables :
 
--    BP1.fastq.gz
+-   BP1.fastq.gz
 
--    BP2.fastq.gz
+-   BP2.fastq.gz
 
--    EP1.fastq.gz
+-   EP1.fastq.gz
 
--    EP2.fastq.gz
+-   EP2.fastq.gz
 
--    FP1.fastq.gz
+-   FP1.fastq.gz
 
--    FP2.fastq.gz
+-   FP2.fastq.gz
 
 **Accès :** stockés sur le serveur du laboratoire XXX (Mazatlán), accès restreint.
 
@@ -111,8 +110,11 @@ Base psbO ([Pierella Karlusich *et al.* 2023]{.underline}) :\
 Contient les séquences psbO issues de bases eucaryotes et procaryotes.\
 Lien : (S-BSST659), DOI: <https://doi.org/10.1111/1755-0998.13592>
 
+[Ci-dessous un exemple d'une séquence issus de l'article :]{.underline}
+
 ```         
-Mettre là l'exemple du texte des seq que m'a montré Solane
+>CK_Cya_NS01_02631_5.2_5.2B_1_93-810 Bacteria;Cyanobacteria;Synechococcales;Synechococcaceae;Cyanobium;Cyanobium_sp. species=Cyanobium_sp. SubCluster=5.2 Clade=5.2 SubClade=5.2B Pigment.type=1 Reference=Doré_et_al.(2020) Database=Cyanorak-v2.1
+CAATCTCACCTACGAAGACATCCACAACACCGGCCTGGCCAACGACTGCCCCTCCCTGCCCGAATCGGCCCGCGGTTCGATCCCCCTGGATTCCGGCACCGCCTACCAGCTCAGGGAGATCTGCATGCACCCCGCCGAGGTGTTCGTGAAGGGCGAACCCGCCAACAAGCGCCAGGAGGCCCAGTTCGTCGCCGGCAAGATCCTCACCCGCTTCACCACCAGCCTGGATCAGGTCTATGGCGACCTGACCGTCAGCGGTGACTCCCTCAACTTCAAGGAGCAGGGCGGTCTCGACTTCCAGATCGTCACCGTGTTGCTGCCCGGCGGTGAGGAGGTGCCCTTCGTGTTCTCCAGCAAGCAGCTCAAGGCCACGGCCGACGGCGCCGCCATCAGCACCAGCACGGACTTCACCGGCACCTACCGGGTGCCCAGCTACCGCACCTCCAACTTCCTGGATCCCAAGTCGCGCGGGCTCACCACCGGCGTGGACTACACCCAGGGCCTGGTGGGCCTCGGCGCCGACGGTGATGGCCTGGAGCGCGAGAACATCAAGAGCTACGTGGACGGCGCCGGCTCGATGGAGCTGGCGATCACCCGGGTGGATGCCAGCACCGGTGAGTTCGCCGGTGTGTTCACCGCCCTGCAGCCCTCCGACACCGACATGGGCTCCAAGGATCCCCTTGACGTGAAGATCACCGGTGAGGTCTACGGCCGTCTG
 ```
 
 ## **6. Scripts**
@@ -121,27 +123,29 @@ Chaque script utilisé dans la mise en place du pipeline et la structuration des
 
 ### **namescript1.R – Quality Control**
 
--    **Input** : fichiers FASTQ
+-   **Input** : fichiers FASTQ
 
--    **Output** : rapports FastQC
+-   **Output** : rapports FastQC
 
--    **Fonction** : contrôle de qualité, filtrage \<70 nt
+-   **Fonction** : contrôle de qualité, filtrage \<70 nt
 
-    ### **namescript2.sh – Indexation de la base psbO**
+```         
+### **namescript2.sh – Indexation de la base psbO**
+```
 
--    **Input** : psb_db_unique.fasta
+-   **Input** : psb_db_unique.fasta
 
--    **Output** : fichiers d’index BWA
+-   **Output** : fichiers d’index BWA
 
--    **Fonction** : préparation pour l'alignement
+-   **Fonction** : préparation pour l'alignement
 
 ### **namescript3.sh – Alignement BWA + comptage**
 
--    **Input** : FASTQ filtrés
+-   **Input** : FASTQ filtrés
 
--    **Output** : .sam, .bam, idxstats.txt
+-   **Output** : .sam, .bam, idxstats.txt
 
--    **Commandes** : `bwa mem …` puis `samtools idxstats`
+-   **Commandes** : `bwa mem …` puis `samtools idxstats`
 
 -   **Fonction** :
 
@@ -149,25 +153,27 @@ Chaque script utilisé dans la mise en place du pipeline et la structuration des
 
 ## **7. Pipeline analytique**
 
-1.   **QC** des reads → FastQC
+1.  **QC** des reads → FastQC
 
-2.   **Filtrage** (\<70 nt, complexité \>70%) → seqkit + perl
+2.  **Filtrage** (\<70 nt, complexité \>70%) → seqkit + perl
 
-3.   **Préparation de la base psbO**
+3.  **Préparation de la base psbO**
 
-    -    modification des headers
+```         
+-    modification des headers
 
-    -    déduplication (`seqkit rmdup`)
+-    déduplication (`seqkit rmdup`)
 
-    -    indexation (`bwa index`)
+-    indexation (`bwa index`)
+```
 
-4.   **Alignement BWA MEM** avec paramètres permissifs
+4.  **Alignement BWA MEM** avec paramètres permissifs
 
-5.   **Comptage** (`samtools idxstats`)
+5.  **Comptage** (`samtools idxstats`)
 
-6.   **Création de la taxonomy_map**
+6.  **Création de la taxonomy_map**
 
-7.   **Génération des profils taxonomiques**
+7.  **Génération des profils taxonomiques**
 
 ## **8. Outputs**
 
@@ -188,6 +194,3 @@ Superviseur :
 Laboratoire d'acceuil:
 
 ....
-
-
-
