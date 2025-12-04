@@ -226,7 +226,7 @@ Listes à compléter selon ton stage des versions et logiciels utilisés
 |            | x.x                          |
 | Packages R | dplyr x.x, ggplot2 x.x, etc. |
 
-## **4. Données** 
+## **4. Données**
 
 ### **4.1 Données d'entrées (input)**
 
@@ -255,7 +255,7 @@ Pour FAIRISER les données de sorties....
 
 ## **5. Scripts**
 
-Pour la FAIRISATION, chaques scripts a été renommer, et leur ordre d'utilisation bien énuméré. Leur contenue a également été largement améliorer, avec des annotations claires pour chaques étapes du scripts et leur fonctions. De plus, les différents scripts utilisés et retravaillés sont énumérés et leur fonction expliqué ci dessous:
+Pour la FAIRISATION, chaques scripts a été renommer, et leur ordre d'utilisation bien énuméré. Leur contenue a également été largement améliorer, avec des annotations claires pour chaques étapes du scripts et leur fonctions, et une partie d'explication et d'introduction au début de chaque script a également été ajouté. De plus, les différents scripts utilisés et retravaillés sont énumérés et leur fonction expliqué ci dessous:
 
 -   **step0_taxonomy_map_creation.sh =** Génère une table de correspondance entre les identifiants des séquences psbO et leur lignée taxonomique à partir du fichier FASTA. Cette *taxonomy map* est utilisée pour l’assignation taxonomique dans les étapes suivantes.
 
@@ -267,7 +267,7 @@ Pour la FAIRISATION, chaques scripts a été renommer, et leur ordre d'utilisati
 
 -   **step4_analyze_composition_taxonomique.sh =** Fusionne les données de comptage (`idxstats`) avec la *taxonomy map* afin de produire un profil d’abondance par taxon.
 
-Un exemple d'un scirpt retravaillé est montré ci-dessous. Nous vous invitons à regarder le fichier des scripts retravailler dans le Github, afin de voir l'amélioration et la FAIRISATION effectué.
+Un exemple d'un scirpt retravaillé est montré ci-dessous. Nous vous invitons à regarder le fichier des scripts retravailler dans le Github, afin de voir l'amélioration et la FAIRISATION effectué sur l'ensemble des scripts.
 
 ```{python}
 ###############################################################################
@@ -393,10 +393,31 @@ done
 
 ## **9. Contact et licence**
 
-Scripts libres / données restreintes.\
-Contact : Solane Cacao-Martins-Février – email…\
-Superviseur :
+Afin d'améliorer le critère FINDABLE, nous référencons ici des informations concernant les acteurs et établissements ayant participé à ce stage.
 
-Laboratoire d'acceuil:
+### **Contacts principaux**
 
-....
+-    **Autreur/ Développeur des scripts :**\
+    Solane Cacao-Martins-Février — *Solane.cacao\@gmail.com*
+
+-    **Superviseure scientifique :**\
+    Dr. Tomasa Del Carmen Cuéllar Martinez — *tcuellar\@ola.icmyl.unam.mx*
+
+### **Institution d’accueil**
+
+**Instituto de Ciencias del Mar y Limnología (ICML)** – UNAM\
+Av. Joel Montes Camarena S/N, Apartado Postal 811\
+C.P. 82040, Mazatlán, Sinaloa, México\
+Tel : +52 (669) 985-28-45
+
+Les données produites durant ce stage sont **non publiques / soumises à restrictions**.\
+Elles ne peuvent pas être redistribuées sans accord écrit de :
+
+-    l’ICML-UNAM,
+
+-    et de la superviseure Dr. Cuéllar Martinez.
+
+Pour toute demande d'accès aux données, veuillez contacter les responsables listés ci-dessus.
+
+**Perspectives FAIR :**\
+Pour renforcer encore la conformité FAIR, nous aurions pu ajouter une **licence explicite** aux scripts et aux jeux de données, ainsi que renseigner les **identifiants ORCID** des contributeurs, **si ceux-ci avaient existé et été disponibles**. Cela aurait amélioré la traçabilité, l’attribution et la réutilisation des ressources.
